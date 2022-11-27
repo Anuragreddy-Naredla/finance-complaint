@@ -2,12 +2,21 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+airflow/*
 # C extensions
 *.so
-
+credential.txt
+.gitconfig
+.env
+saved_models/*
+.jupyter
+.local
+.ssh
+.vscode-server
+finance_artifact/*
 # Distribution / packaging
 .Python
+.idea/
 build/
 develop-eggs/
 dist/
