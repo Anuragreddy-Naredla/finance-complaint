@@ -110,8 +110,10 @@ class DataIngestion:
                 json_file_path = os.path.join(json_data_dir, file_name)
                 logger.debug(f"Converting {json_file_path} into parquet format at {file_path}")
                 df = spark_session.read.json(json_file_path)
+                logger.info("started_saving_data_parqet!!!!!!!!!!!")
                 if df.count() > 0:
                     df.write.mode('append').parquet(file_path)
+                logger.info("done!!!!!!!!!!!!!!!!!!!!!!!!!")
             return file_path
         except Exception as e:
             raise FinanceException(e, sys)
@@ -232,7 +234,7 @@ def main():
     try:
         config = FinanceConfig()
         data_ingestion_config = config.get_data_ingestion_config()
-        data_ingestion = DataIngestion(data_ingestion_config=data_ingestion_config, n_day_interval=6)
+        data_ingestion = DataIngestion(data_ingestion_config=data_ingestion_config, n_retry=6)
         data_ingestion.initiate_data_ingestion()
     except Exception as e:
         raise FinanceException(e, sys)
