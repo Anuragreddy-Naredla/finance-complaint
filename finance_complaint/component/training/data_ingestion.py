@@ -93,7 +93,7 @@ class DataIngestion:
         downloaded files will be converted and merged into single parquet file
         json_data_dir: downloaded json file directory
         data_dir: converted and combined file will be generated in data_dir
-        output_file_name: output file name
+        output_file_name: output file name 
         =======================================================================================
         returns output_file_path
         """
@@ -110,10 +110,8 @@ class DataIngestion:
                 json_file_path = os.path.join(json_data_dir, file_name)
                 logger.debug(f"Converting {json_file_path} into parquet format at {file_path}")
                 df = spark_session.read.json(json_file_path)
-                logger.info("started_saving_data_parqet!!!!!!!!!!!")
                 if df.count() > 0:
                     df.write.mode('append').parquet(file_path)
-                logger.info("done!!!!!!!!!!!!!!!!!!!!!!!!!")
             return file_path
         except Exception as e:
             raise FinanceException(e, sys)
@@ -121,7 +119,7 @@ class DataIngestion:
     def retry_download_data(self, data, download_url: DownloadUrl):
         """
         This function help to avoid failure as it help to download failed file again
-
+        
         data:failed response
         download_url: DownloadUrl
         """
@@ -188,7 +186,7 @@ class DataIngestion:
 
     def write_metadata(self, file_path: str) -> None:
         """
-        This function help us to update metadata information
+        This function help us to update metadata information 
         so that we can avoid redundant download and merging.
 
         """
@@ -234,7 +232,7 @@ def main():
     try:
         config = FinanceConfig()
         data_ingestion_config = config.get_data_ingestion_config()
-        data_ingestion = DataIngestion(data_ingestion_config=data_ingestion_config, n_retry=6)
+        data_ingestion = DataIngestion(data_ingestion_config=data_ingestion_config, n_day_interval=6)
         data_ingestion.initiate_data_ingestion()
     except Exception as e:
         raise FinanceException(e, sys)

@@ -1,4 +1,10 @@
 import os
+from finance_complaint.constant.environment.variable_key import AWS_ACCESS_KEY_ID_ENV_KEY,AWS_SECRET_ACCESS_KEY_ENV_KEY
+from dotenv import load_dotenv
+load_dotenv()
+access_key_id = os.getenv(AWS_ACCESS_KEY_ID_ENV_KEY, )
+secret_access_key = os.getenv(AWS_SECRET_ACCESS_KEY_ENV_KEY, )
+#print(access_key_id,secret_access_key)
 import argparse
 from finance_complaint.exception import FinanceException
 from finance_complaint.pipeline import TrainingPipeline, PredictionPipeline
@@ -7,13 +13,14 @@ from finance_complaint.config.pipeline.training import FinanceConfig
 import sys
 
 
+
 def start_training(start=False):
     try:
         if not start:
             return None
-        logger.info("Training Started")
+        print("Training Running")
         TrainingPipeline(FinanceConfig()).start()
-        logger.info("Training Completed")
+        
     except Exception as e:
         raise FinanceException(e, sys)
 
@@ -24,7 +31,7 @@ def start_prediction(start=False):
             return None
         print("Prediction started")
         PredictionPipeline().start_batch_prediction()
-
+        
     except Exception as e:
         raise FinanceException(e, sys)
 
