@@ -12,11 +12,17 @@ class DataIngestionMetadata:
 
     def __init__(self, metadata_file_path,):
         self.metadata_file_path = metadata_file_path
-    
-       
+
+
 
     @property
     def is_metadata_file_present(self):
+        """
+        This method is used to check the meta_info.yaml file is present or not
+
+        Returns:
+            Bool: True or False
+        """
         return os.path.exists(self.metadata_file_path)
 
     def write_metadata_info(self, from_date: str, to_date: str, data_file_path: str):
@@ -32,7 +38,18 @@ class DataIngestionMetadata:
             raise FinanceException(e, sys)
 
     def get_metadata_info(self) -> DataIngestionMetadataInfo:
+        """
+        This method is used to get the metadata information
+
+        Raises:
+            Exception: _description_
+            FinanceException: _description_
+
+        Returns:
+            DataIngestionMetadataInfo: _description_
+        """
         try:
+            # If file is not present raising an error if file is there reading the yaml file.
             if not self.is_metadata_file_present:
                 raise Exception("No metadata file available")
             metadata = read_yaml_file(self.metadata_file_path)
