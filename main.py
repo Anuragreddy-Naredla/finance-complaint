@@ -7,7 +7,8 @@ secret_access_key = os.getenv(AWS_SECRET_ACCESS_KEY_ENV_KEY, )
 #print(access_key_id,secret_access_key)
 import argparse
 from finance_complaint.exception import FinanceException
-from finance_complaint.pipeline import TrainingPipeline, PredictionPipeline
+from finance_complaint.pipeline.training import TrainingPipeline
+from finance_complaint.pipeline.prediction import PredictionPipeline
 from finance_complaint.logger import logger
 from finance_complaint.config.pipeline.training import FinanceConfig
 import sys
@@ -20,7 +21,7 @@ def start_training(start=False):
             return None
         print("Training Running")
         TrainingPipeline(FinanceConfig()).start()
-        
+
     except Exception as e:
         raise FinanceException(e, sys)
 
@@ -31,7 +32,7 @@ def start_prediction(start=False):
             return None
         print("Prediction started")
         PredictionPipeline().start_batch_prediction()
-        
+
     except Exception as e:
         raise FinanceException(e, sys)
 
