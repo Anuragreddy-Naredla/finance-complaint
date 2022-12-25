@@ -98,7 +98,7 @@ class PredictionPipeline:
                 for invalid_file in invalid_files:
                     logger.info(f"Moving invalid file {invalid_file} to failed dir: {failed_dir}")
                     #self.s3_storage.move(source_key=invalid_file, destination_dir_key=failed_dir)
-                    
+
 
             if len(valid_files) == 0:
                 logger.info(f"No valid file found.")
@@ -108,7 +108,7 @@ class PredictionPipeline:
             for valid_file in valid_files:
                 logger.info("Staring prediction of file: {valid_file}")
                 dataframe: DataFrame = self.read_file(valid_file)
-                dataframe = dataframe.drop(self.schema.col_consumer_disputed)
+                # dataframe = dataframe.drop(self.schema.col_consumer_disputed)
                 transformed_dataframe = estimator.transform(dataframe=dataframe)
                 required_columns = self.schema.required_prediction_columns + [self.schema.prediction_label_column_name]
                 logger.info(f"Saving required_columns: {required_columns}")

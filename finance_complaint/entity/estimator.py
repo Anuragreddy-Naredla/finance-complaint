@@ -316,6 +316,9 @@ class S3Estimator(CloudEstimator):
 
 
 class FinanceComplaintEstimator:
+    """
+    This class is used for the make the predictions using local model.
+    """
 
     def __init__(self, **kwargs):
         try:
