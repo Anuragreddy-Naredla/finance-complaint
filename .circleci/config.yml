@@ -8,14 +8,14 @@ jobs:
     steps:
       - checkout
 
-      - run: 
+      - run:
           name: lint code
           command: echo "Linting repository"
 
       - run: 
           name: run unit tests
           command: echo "Running unit tests"
-  
+
   continuous-delivery:
     docker:
       - image: google/cloud-sdk
@@ -41,13 +41,13 @@ jobs:
           name: build and tag
           command: docker build -t $GOOGLE_COMPUTE_ZONE-docker.pkg.dev/${GOOGLE_PROJECT_ID}/$REPOSITORY/$IMAGE_NAME:$IMAGE_TAG .
 
-      - run: 
+      - run:
           name: configure docker login
           command: gcloud auth configure-docker $GOOGLE_COMPUTE_ZONE-docker.pkg.dev
-      
+
       - run:
           name: push to private repository
-          command: docker push $GOOGLE_COMPUTE_ZONE-docker.pkg.dev/${GOOGLE_PROJECT_ID}/$REPOSITORY/$IMAGE_NAME:$IMAGE_TAG 
+          command: docker push $GOOGLE_COMPUTE_ZONE-docker.pkg.dev/${GOOGLE_PROJECT_ID}/$REPOSITORY/$IMAGE_NAME:$IMAGE_TAG
 
   continuous-deployment:
     machine: true
@@ -70,22 +70,22 @@ jobs:
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
 
-      - run: 
+      - run:
           name: configure docker login
           command: gcloud auth configure-docker $GOOGLE_COMPUTE_ZONE-docker.pkg.dev
 
       - run:
           name: pull image from private repository
-          command: docker pull ${GOOGLE_COMPUTE_ZONE}-docker.pkg.dev/${GOOGLE_PROJECT_ID}/$REPOSITORY/$GAR_IMAGE_NAME:$IMAGE_TAG 
-        
-      - run: 
+          command: docker pull ${GOOGLE_COMPUTE_ZONE}-docker.pkg.dev/${GOOGLE_PROJECT_ID}/$REPOSITORY/$GAR_IMAGE_NAME:$IMAGE_TAG
+
+      - run:
           name: Set env variable
           command: echo 'export IMAGE_NAME="${GOOGLE_COMPUTE_ZONE}-docker.pkg.dev/${GOOGLE_PROJECT_ID}/$REPOSITORY/finance-complaint:$IMAGE_TAG"' >> "$BASH_ENV"
 
       - run:
           name: start the containers
           command: docker-compose up -d
-  
+
 workflows:
   CICD:
     jobs:
